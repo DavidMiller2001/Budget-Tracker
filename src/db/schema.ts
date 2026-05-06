@@ -1,12 +1,13 @@
 import { sqliteTable, integer, text } from 'drizzle-orm/sqlite-core'
 import { sql } from 'drizzle-orm'
 
-export const todos = sqliteTable('todos', {
-  id: integer({ mode: 'number' }).primaryKey({
-    autoIncrement: true,
-  }),
-  title: text().notNull(),
+export const transactions = sqliteTable('transactions', {
+  id: integer('id', { mode: 'number' })
+    .notNull()
+    .primaryKey({ autoIncrement: true }),
+  amount: integer('amount', { mode: 'number' }),
   createdAt: integer('created_at', { mode: 'timestamp' }).default(
     sql`(unixepoch())`,
   ),
+  updatedAt: integer('updatedAt', { mode: 'timestamp' }),
 })

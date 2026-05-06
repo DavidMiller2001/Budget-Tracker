@@ -35,7 +35,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
         <HeadContent />
       </head>
       <body>
-        {children}
+        <RootLayout>{children}</RootLayout>
         <TanStackDevtools
           config={{
             position: 'bottom-right',
@@ -50,5 +50,13 @@ function RootDocument({ children }: { children: React.ReactNode }) {
         <Scripts />
       </body>
     </html>
+  )
+}
+
+function RootLayout(props: { children: React.ReactNode }) {
+  return (
+    <div className="max-w-2xl w-full flex flex-col h-screen justify-center items-center m-auto">
+      {props.children}
+    </div>
   )
 }

@@ -26,7 +26,7 @@ function Home() {
   const { data } = Route.useLoaderData()
 
   return (
-    <div className="max-w-2xl w-full flex flex-col h-screen justify-center items-center m-auto">
+    <>
       <Link to="/transactions/new">
         <Button asChild variant={'ghost'} size={'icon-sm'}>
           <Plus />
@@ -60,7 +60,7 @@ function Home() {
           ))}
         </TableBody>
       </Table>
-    </div>
+    </>
   )
 }
 

@@ -1,4 +1,9 @@
-import { HeadContent, Scripts, createRootRoute } from '@tanstack/react-router'
+import {
+  HeadContent,
+  Link,
+  Scripts,
+  createRootRoute,
+} from '@tanstack/react-router'
 import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools'
 import { TanStackDevtools } from '@tanstack/react-devtools'
 
@@ -55,8 +60,15 @@ function RootDocument({ children }: { children: React.ReactNode }) {
 
 function RootLayout(props: { children: React.ReactNode }) {
   return (
-    <div className="max-w-2xl w-full flex flex-col h-screen justify-center items-center m-auto">
-      {props.children}
+    <div>
+      <nav className="p-4 flex justify-center text-xl">
+        <Link to="/">
+          <h1 className="font-bold">Budget Tracker</h1>
+        </Link>
+      </nav>
+      <main className="max-w-2xl w-full flex flex-col justify-center items-center m-auto">
+        {props.children}
+      </main>
     </div>
   )
 }

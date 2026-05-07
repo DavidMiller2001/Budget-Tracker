@@ -8,6 +8,13 @@
       "when": 1778107059207,
       "tag": "0000_noisy_starfox",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "6",
+      "when": 1778114338682,
+      "tag": "0001_burly_mandroid",
+      "breakpoints": true
     }
   ]
 }

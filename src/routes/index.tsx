@@ -36,6 +36,7 @@ function Home() {
         <TableHeader>
           <TableRow>
             <TableHead>Amount</TableHead>
+            <TableHead>Description</TableHead>
             <TableHead>Date</TableHead>
             <TableHead></TableHead>
             <TableHead></TableHead>
@@ -45,6 +46,7 @@ function Home() {
           {data.map((t) => (
             <TableRow key={t.id}>
               <TableCell>{`$ ${t.amount}`}</TableCell>
+              <TableCell>{t.description}</TableCell>
               <TableCell>{formatDate(t.createdAt || new Date())}</TableCell>
               <TableCell>
                 <Button asChild variant={'outline'} size={'icon-xs'}>

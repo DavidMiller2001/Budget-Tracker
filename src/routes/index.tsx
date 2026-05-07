@@ -7,15 +7,26 @@ import {
   TableHeader,
   TableRow,
 } from '#/components/ui/table'
-import { createFileRoute, Link } from '@tanstack/react-router'
-import { createServerFn } from '@tanstack/react-start'
+
+import { createFileRoute, Link, useRouter } from '@tanstack/react-router'
+import { createServerFn, useServerFn } from '@tanstack/react-start'
+import { eq } from 'drizzle-orm'
 import { Trash2, SquarePen, Plus } from 'lucide-react'
+import z from 'zod'
 
 const getTransactions = createServerFn({ method: 'GET' }).handler(async () => {
   const { db } = await import('#/db')
   const data = await db.query.transactions.findMany()
   return { data }
 })
+
+const deleteTransaction = createServerFn({ method: 'POST' })
+  .inputValidator(z.object({ id: z.number() }))
+  .handler(async ({ data }) => {
+    const { db } = await import('#/db')
+    const { transactions } = await import('#/db/schema')
+    await db.delete(transactions).where(eq(transactions.id, data.id))
+  })
 
 export const Route = createFileRoute('/')({
   component: Home,
@@ -24,7 +35,8 @@ export const Route = createFileRoute('/')({
 
 function Home() {
   const { data } = Route.useLoaderData()
-
+  const deleteTransactionFn = useServerFn(deleteTransaction)
+  const router = useRouter()
   return (
     <>
       <Link to="/transactions/new">
@@ -54,7 +66,14 @@ function Home() {
                 </Button>
               </TableCell>
               <TableCell>
-                <Button variant={'destructiveGhost'} size={'icon-xs'} asChild>
+                <Button
+                  variant="destructiveGhost"
+                  size="icon-sm"
+                  onClick={async () => {
+                    await deleteTransactionFn({ data: { id: t.id } })
+                    router.invalidate()
+                  }}
+                >
                   <Trash2 />
                 </Button>
               </TableCell>

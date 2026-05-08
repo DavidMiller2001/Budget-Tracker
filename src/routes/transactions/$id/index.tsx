@@ -24,13 +24,15 @@ const getTransaction = createServerFn({ method: 'GET' })
 function RouteComponent() {
   const { result } = Route.useLoaderData()
   return (
-    <UpdateTransactionForm
-      transaction={{
-        id: result[0].id,
-        amount: result[0].amount || 0,
-        description: result[0].description || '',
-        createdAt: result[0].createdAt || new Date(),
-      }}
-    />
+    <div className="w-full max-w-md">
+      <UpdateTransactionForm
+        transaction={{
+          id: result[0].id,
+          amount: result[0].amount || 0,
+          description: result[0].description || '',
+          createdAt: result[0].createdAt || new Date(),
+        }}
+      />
+    </div>
   )
 }

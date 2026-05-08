@@ -100,8 +100,13 @@ export function TransactionForm(props: {
             <Controller
               name="createdAt"
               control={form.control}
-              render={() => <DatePickerInput />}
-            ></Controller>
+              render={({ field }) => (
+                <DatePickerInput
+                  value={field.value}
+                  onChange={field.onChange}
+                />
+              )}
+            />
           </FieldGroup>
         </form>
       </CardContent>

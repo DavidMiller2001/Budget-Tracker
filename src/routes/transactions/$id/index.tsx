@@ -31,6 +31,7 @@ function RouteComponent() {
           amount: result[0].amount || 0,
           description: result[0].description || '',
           createdAt: result[0].createdAt || new Date(),
+          updatedAt: result[0].updatedAt || new Date(),
         }}
       />
     </div>

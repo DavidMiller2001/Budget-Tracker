@@ -30,6 +30,7 @@ function RouteComponent() {
   const addNewTransactionFn = useServerFn(addNewTransaction)
 
   function handleSubmit(data: z.infer<typeof formSchema>) {
+    console.log('Date: ' + data.createdAt)
     addNewTransactionFn({ data: { ...data } })
   }
 

@@ -16,7 +16,7 @@ import { DatePickerInput } from './ui/DatePicker'
 import { createServerFn, useServerFn } from '@tanstack/react-start'
 import { eq } from 'drizzle-orm'
 import { transactions } from '#/db/schema'
-import { redirect, useRouter } from '@tanstack/react-router'
+import { redirect } from '@tanstack/react-router'
 
 export const formSchema = z.object({
   description: z.string(),
@@ -54,6 +54,7 @@ export function UpdateTransactionForm(props: {
     description: string
     amount: number
     createdAt: Date
+    updatedAt: Date
   }
 }) {
   const { transaction } = props
@@ -64,11 +65,12 @@ export function UpdateTransactionForm(props: {
     defaultValues: {
       amount: transaction.amount,
       description: transaction.description,
-      createdAt: transaction.createdAt,
+      createdAt: transaction.updatedAt || transaction.createdAt,
     },
   })
 
   async function onSubmit(formData: z.input<typeof formSchema>) {
+    console.log('Date: ' + formData.createdAt)
     await updateTransactionFn({
       data: {
         id: transaction.id.toString(),
@@ -134,8 +136,13 @@ export function UpdateTransactionForm(props: {
             <Controller
               name="createdAt"
               control={form.control}
-              render={() => <DatePickerInput />}
-            ></Controller>
+              render={({ field }) => (
+                <DatePickerInput
+                  value={field.value}
+                  onChange={field.onChange}
+                />
+              )}
+            />
           </FieldGroup>
         </form>
       </CardContent>

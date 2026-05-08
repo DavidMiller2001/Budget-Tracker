@@ -59,7 +59,9 @@ function Home() {
             <TableRow key={t.id}>
               <TableCell>{`$ ${t.amount}`}</TableCell>
               <TableCell>{t.description}</TableCell>
-              <TableCell>{formatDate(t.createdAt || new Date())}</TableCell>
+              <TableCell>
+                {formatDate(t.updatedAt || t.createdAt || new Date())}
+              </TableCell>
               <TableCell>
                 <Button size={'icon-sm'} asChild variant={'ghost'}>
                   <Link to="/transactions/$id" params={{ id: t.id.toString() }}>

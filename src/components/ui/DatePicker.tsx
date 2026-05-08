@@ -34,11 +34,20 @@ function isValidDate(date: Date | undefined) {
   return !isNaN(date.getTime())
 }
 
-export function DatePickerInput() {
+export function DatePickerInput({
+  value,
+  onChange,
+}: {
+  value?: Date
+  onChange: (date: Date | undefined) => void
+}) {
   const [open, setOpen] = React.useState(false)
-  const [date, setDate] = React.useState<Date | undefined>(new Date())
-  const [month, setMonth] = React.useState<Date | undefined>(date)
-  const [value, setValue] = React.useState(formatDate(date))
+  const [month, setMonth] = React.useState<Date | undefined>(value)
+  const [inputValue, setInputValue] = React.useState(formatDate(value))
+
+  React.useEffect(() => {
+    setInputValue(formatDate(value))
+  }, [value])
 
   return (
     <Field>
@@ -46,13 +55,13 @@ export function DatePickerInput() {
       <InputGroup>
         <InputGroupInput
           id="date-required"
-          value={value}
+          value={inputValue}
           placeholder="June 01, 2025"
           onChange={(e) => {
             const date = new Date(e.target.value)
-            setValue(e.target.value)
+            setInputValue(e.target.value)
             if (isValidDate(date)) {
-              setDate(date)
+              onChange(date)
               setMonth(date)
             }
           }}
@@ -84,12 +93,12 @@ export function DatePickerInput() {
             >
               <Calendar
                 mode="single"
-                selected={date}
+                selected={value}
                 month={month}
                 onMonthChange={setMonth}
                 onSelect={(date) => {
-                  setDate(date)
-                  setValue(formatDate(date))
+                  onChange(date)
+                  setInputValue(formatDate(date))
                   setOpen(false)
                 }}
               />

@@ -1,4 +1,4 @@
-import { formSchema, TransactionForm } from '#/components/transactionForm'
+import { formSchema, TransactionForm } from '#/components/newTransactionForm'
 import { createFileRoute, redirect } from '@tanstack/react-router'
 import { createServerFn, useServerFn } from '@tanstack/react-start'
 import z from 'zod'

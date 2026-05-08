@@ -61,8 +61,10 @@ function Home() {
               <TableCell>{t.description}</TableCell>
               <TableCell>{formatDate(t.createdAt || new Date())}</TableCell>
               <TableCell>
-                <Button asChild variant={'outline'} size={'icon-xs'}>
-                  <SquarePen />
+                <Button size={'icon-sm'} asChild variant={'ghost'}>
+                  <Link to="/transactions/$id" params={{ id: t.id.toString() }}>
+                    <SquarePen />
+                  </Link>
                 </Button>
               </TableCell>
               <TableCell>

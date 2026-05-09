@@ -61,12 +61,12 @@ function RootDocument({ children }: { children: React.ReactNode }) {
 function RootLayout(props: { children: React.ReactNode }) {
   return (
     <div>
-      <nav className="p-4 flex justify-center text-xl">
+      <nav className="p-4 flex  text-xl">
         <Link to="/">
           <h1 className="font-bold">Budget Tracker</h1>
         </Link>
       </nav>
-      <main className="max-w-2xl w-full flex flex-col justify-center items-center m-auto">
+      <main className="flex flex-col justify-center items-center">
         {props.children}
       </main>
     </div>

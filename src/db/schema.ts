@@ -1,5 +1,5 @@
 import { sqliteTable, integer, text } from 'drizzle-orm/sqlite-core'
-import { sql } from 'drizzle-orm'
+import { sql, type InferSelectModel } from 'drizzle-orm'
 
 export const transactions = sqliteTable('transactions', {
   id: integer('id', { mode: 'number' })
@@ -12,3 +12,5 @@ export const transactions = sqliteTable('transactions', {
   ),
   updatedAt: integer('updatedAt', { mode: 'timestamp' }),
 })
+
+export type Transaction = InferSelectModel<typeof transactions>

@@ -13,12 +13,17 @@ import {
   useReactTable,
   flexRender,
   type ColumnDef,
+  type SortingState,
+  getSortedRowModel,
 } from '@tanstack/react-table'
 import {
   DeleteTransactionButton,
   UpdateTransactionButton,
 } from './ui/TableButtons'
 import { cn } from '#/lib/utils'
+import { useState } from 'react'
+import { Button } from './ui/button'
+import { ArrowUpDown } from 'lucide-react'
 
 export const columns: ColumnDef<Transaction>[] = [
   {
@@ -30,11 +35,31 @@ export const columns: ColumnDef<Transaction>[] = [
   },
   {
     accessorKey: 'amount',
-    header: 'Amount',
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+        >
+          Amount
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      )
+    },
   },
   {
     accessorKey: 'transactionDate',
-    header: 'Date',
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === 'desc')}
+        >
+          Date
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      )
+    },
     cell: ({ row }) => {
       const date = row.original.transactionDate
 
@@ -51,10 +76,22 @@ interface DataTableProps {
 }
 
 export function TransactionDataTable({ columns, data }: DataTableProps) {
+  const [sorting, setSorting] = useState<SortingState>([
+    {
+      id: 'transactionDate',
+      desc: true,
+    },
+  ])
+
   const table = useReactTable({
     data,
     columns,
     getCoreRowModel: getCoreRowModel(),
+    onSortingChange: setSorting,
+    getSortedRowModel: getSortedRowModel(),
+    state: {
+      sorting,
+    },
   })
 
   return (

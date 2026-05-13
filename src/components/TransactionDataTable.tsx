@@ -18,11 +18,15 @@ import {
   DeleteTransactionButton,
   UpdateTransactionButton,
 } from './ui/TableButtons'
+import { cn } from '#/lib/utils'
 
 export const columns: ColumnDef<Transaction>[] = [
   {
     accessorKey: 'description',
     header: 'Description',
+    meta: {
+      className: 'text-start',
+    },
   },
   {
     accessorKey: 'amount',
@@ -31,6 +35,13 @@ export const columns: ColumnDef<Transaction>[] = [
   {
     accessorKey: 'transactionDate',
     header: 'Date',
+    cell: ({ row }) => {
+      const date = row.original.transactionDate
+
+      return new Intl.DateTimeFormat('en-US', {
+        dateStyle: 'short',
+      }).format(date)
+    },
   },
 ]
 
@@ -54,7 +65,13 @@ export function TransactionDataTable({ columns, data }: DataTableProps) {
             <TableRow key={headerGroup.id}>
               {headerGroup.headers.map((header) => {
                 return (
-                  <TableHead key={header.id}>
+                  <TableHead
+                    key={header.id}
+                    className={cn(
+                      'text-center',
+                      header.column.columnDef.meta?.className,
+                    )}
+                  >
                     {header.isPlaceholder
                       ? null
                       : flexRender(
@@ -75,7 +92,13 @@ export function TransactionDataTable({ columns, data }: DataTableProps) {
                 data-state={row.getIsSelected() && 'selected'}
               >
                 {row.getVisibleCells().map((cell) => (
-                  <TableCell key={cell.id}>
+                  <TableCell
+                    key={cell.id}
+                    className={cn(
+                      'text-center',
+                      cell.column.columnDef.meta?.className,
+                    )}
+                  >
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
                   </TableCell>
                 ))}

@@ -11,18 +11,6 @@ import {
   CardHeader,
   CardTitle,
 } from '#/components/ui/card'
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from '#/components/ui/table'
-import {
-  DeleteTransactionButton,
-  UpdateTransactionButton,
-} from '#/components/ui/TableButtons'
 
 import { createFileRoute, Link } from '@tanstack/react-router'
 import { createServerFn } from '@tanstack/react-start'
@@ -42,6 +30,14 @@ export type TransactionChartDataType = 'Income' | 'Expense' | 'Other'
 
 function Home() {
   const { data } = Route.useLoaderData()
+  const formattedData = data.map((t) => {
+    return {
+      id: t.id,
+      description: t.description,
+      amount: t.amount,
+      transactionDate: t.transactionDate,
+    }
+  })
 
   const transactionData: {
     type: TransactionChartDataType
@@ -84,57 +80,8 @@ function Home() {
             <Plus />
           </Button>
         </Link>
-        <TransactionDataTable columns={columns} data={data} />
+        <TransactionDataTable columns={columns} data={formattedData} />
       </CardContent>
     </Card>
   )
 }
-
-// function TransactionTable(props: {
-//   data: {
-//     id: number
-//     description: string | null
-//     amount: number | null
-//     createdAt: Date | null
-//     updatedAt: Date | null
-//   }[]
-// }) {
-//   const { data } = props
-
-//   return (
-//     <Table>
-//       <TableHeader>
-//         <TableRow>
-//           <TableHead>Amount</TableHead>
-//           <TableHead>Description</TableHead>
-//           <TableHead>Date</TableHead>
-//           <TableHead></TableHead>
-//           <TableHead></TableHead>
-//         </TableRow>
-//       </TableHeader>
-//       <TableBody>
-//         {data.map((t) => (
-//           <TableRow key={t.id}>
-//             <TableCell>{`$ ${t.amount}`}</TableCell>
-//             <TableCell>{t.description}</TableCell>
-//             <TableCell>
-//               {formatDate(t.updatedAt || t.createdAt || new Date())}
-//             </TableCell>
-//             <TableCell>
-//               <UpdateTransactionButton id={t.id} />
-//             </TableCell>
-//             <TableCell>
-//               <DeleteTransactionButton id={t.id} />
-//             </TableCell>
-//           </TableRow>
-//         ))}
-//       </TableBody>
-//     </Table>
-//   )
-// }
-
-// function formatDate(date: Date) {
-//   return new Intl.DateTimeFormat(undefined, {
-//     dateStyle: 'short',
-//   }).format(date)
-// }

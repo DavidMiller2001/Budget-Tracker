@@ -90,51 +90,51 @@ function Home() {
   )
 }
 
-function TransactionTable(props: {
-  data: {
-    id: number
-    description: string | null
-    amount: number | null
-    createdAt: Date | null
-    updatedAt: Date | null
-  }[]
-}) {
-  const { data } = props
+// function TransactionTable(props: {
+//   data: {
+//     id: number
+//     description: string | null
+//     amount: number | null
+//     createdAt: Date | null
+//     updatedAt: Date | null
+//   }[]
+// }) {
+//   const { data } = props
 
-  return (
-    <Table>
-      <TableHeader>
-        <TableRow>
-          <TableHead>Amount</TableHead>
-          <TableHead>Description</TableHead>
-          <TableHead>Date</TableHead>
-          <TableHead></TableHead>
-          <TableHead></TableHead>
-        </TableRow>
-      </TableHeader>
-      <TableBody>
-        {data.map((t) => (
-          <TableRow key={t.id}>
-            <TableCell>{`$ ${t.amount}`}</TableCell>
-            <TableCell>{t.description}</TableCell>
-            <TableCell>
-              {formatDate(t.updatedAt || t.createdAt || new Date())}
-            </TableCell>
-            <TableCell>
-              <UpdateTransactionButton id={t.id} />
-            </TableCell>
-            <TableCell>
-              <DeleteTransactionButton id={t.id} />
-            </TableCell>
-          </TableRow>
-        ))}
-      </TableBody>
-    </Table>
-  )
-}
+//   return (
+//     <Table>
+//       <TableHeader>
+//         <TableRow>
+//           <TableHead>Amount</TableHead>
+//           <TableHead>Description</TableHead>
+//           <TableHead>Date</TableHead>
+//           <TableHead></TableHead>
+//           <TableHead></TableHead>
+//         </TableRow>
+//       </TableHeader>
+//       <TableBody>
+//         {data.map((t) => (
+//           <TableRow key={t.id}>
+//             <TableCell>{`$ ${t.amount}`}</TableCell>
+//             <TableCell>{t.description}</TableCell>
+//             <TableCell>
+//               {formatDate(t.updatedAt || t.createdAt || new Date())}
+//             </TableCell>
+//             <TableCell>
+//               <UpdateTransactionButton id={t.id} />
+//             </TableCell>
+//             <TableCell>
+//               <DeleteTransactionButton id={t.id} />
+//             </TableCell>
+//           </TableRow>
+//         ))}
+//       </TableBody>
+//     </Table>
+//   )
+// }
 
-function formatDate(date: Date) {
-  return new Intl.DateTimeFormat(undefined, {
-    dateStyle: 'short',
-  }).format(date)
-}
+// function formatDate(date: Date) {
+//   return new Intl.DateTimeFormat(undefined, {
+//     dateStyle: 'short',
+//   }).format(date)
+// }

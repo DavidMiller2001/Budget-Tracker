@@ -29,15 +29,10 @@ export const columns: ColumnDef<Transaction>[] = [
     header: 'Amount',
   },
   {
-    accessorKey: 'date',
+    accessorKey: 'transactionDate',
     header: 'Date',
   },
 ]
-
-// interface DataTableProps<TData, TValue> {
-//   columns: ColumnDef<TData, TValue>[]
-//   data: TData[]
-// }
 
 interface DataTableProps {
   columns: ColumnDef<Transaction>[]

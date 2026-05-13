@@ -14,35 +14,49 @@ import { Input } from './ui/input'
 import { Button } from './ui/button'
 import { DatePickerInput } from './ui/DatePicker'
 
-export const formSchema = z.object({
-  description: z.string(),
-  amount: z.number(),
-  createdAt: z.date(),
-})
+import { insertTransactionSchema } from '@/db/schema'
+import { createServerFn, useServerFn } from '@tanstack/react-start'
+import { redirect } from '@tanstack/react-router'
 
-export function TransactionForm(props: {
-  onSubmit: (data: {
-    description: string
-    amount: number
-    createdAt: Date
-  }) => void
-  transaction?: {
-    description: string
-    amount: number
-    createdAt: Date
-  }
-}) {
-  const form = useForm<z.input<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+const addNewTransaction = createServerFn({ method: 'POST' })
+  .inputValidator(
+    z.object({
+      amount: z.number(),
+      description: z.string(),
+      transactionDate: z.date(),
+    }),
+  )
+  .handler(async ({ data }) => {
+    const { db } = await import('#/db')
+    const { transactions } = await import('#/db/schema')
+    await db.insert(transactions).values({
+      amount: data.amount,
+      description: data.description,
+      transactionDate: data.transactionDate,
+    })
+    throw redirect({ to: '/' })
+  })
+
+export function TransactionForm() {
+  const addNewTransactionFn = useServerFn(addNewTransaction)
+
+  const form = useForm<z.input<typeof insertTransactionSchema>>({
+    resolver: zodResolver(insertTransactionSchema),
     defaultValues: {
       amount: 0,
       description: '',
-      createdAt: new Date(),
+      transactionDate: new Date(),
     },
   })
 
-  function onSubmit(data: z.input<typeof formSchema>) {
-    props.onSubmit(data)
+  function onSubmit(data: z.input<typeof insertTransactionSchema>) {
+    addNewTransactionFn({
+      data: {
+        amount: data.amount,
+        description: data.description || '',
+        transactionDate: data.transactionDate,
+      },
+    })
   }
 
   return (
@@ -64,6 +78,7 @@ export function TransactionForm(props: {
                   </FieldLabel>
                   <Input
                     {...field}
+                    value={field.value || ''}
                     id="transaction-description"
                     placeholder="..."
                     autoComplete="on"
@@ -98,7 +113,7 @@ export function TransactionForm(props: {
             />
 
             <Controller
-              name="createdAt"
+              name="transactionDate"
               control={form.control}
               render={({ field }) => (
                 <DatePickerInput

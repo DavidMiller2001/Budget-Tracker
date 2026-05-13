@@ -15,14 +15,8 @@ import { Button } from './ui/button'
 import { DatePickerInput } from './ui/DatePicker'
 import { createServerFn, useServerFn } from '@tanstack/react-start'
 import { eq } from 'drizzle-orm'
-import { transactions } from '#/db/schema'
+import { insertTransactionSchema, transactions } from '#/db/schema'
 import { redirect } from '@tanstack/react-router'
-
-export const formSchema = z.object({
-  description: z.string(),
-  amount: z.number(),
-  createdAt: z.date(),
-})
 
 const updateTransaction = createServerFn({ method: 'POST' })
   .inputValidator(
@@ -30,7 +24,7 @@ const updateTransaction = createServerFn({ method: 'POST' })
       id: z.string(),
       amount: z.number(),
       description: z.string(),
-      createdAt: z.date(),
+      transactionDate: z.date(),
     }),
   )
   .handler(async ({ data }) => {
@@ -41,7 +35,7 @@ const updateTransaction = createServerFn({ method: 'POST' })
       .set({
         amount: data.amount,
         description: data.description,
-        updatedAt: data.createdAt,
+        transactionDate: data.transactionDate,
       })
       .where(eq(transactions.id, numId))
 
@@ -60,23 +54,22 @@ export function UpdateTransactionForm(props: {
   const { transaction } = props
   const updateTransactionFn = useServerFn(updateTransaction)
 
-  const form = useForm<z.input<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<z.input<typeof insertTransactionSchema>>({
+    resolver: zodResolver(insertTransactionSchema),
     defaultValues: {
       amount: transaction.amount,
       description: transaction.description,
-      createdAt: transaction.updatedAt || transaction.createdAt,
+      transactionDate: transaction.createdAt,
     },
   })
 
-  async function onSubmit(formData: z.input<typeof formSchema>) {
-    console.log('Date: ' + formData.createdAt)
+  async function onSubmit(formData: z.input<typeof insertTransactionSchema>) {
     await updateTransactionFn({
       data: {
         id: transaction.id.toString(),
         amount: formData.amount,
-        createdAt: formData.createdAt,
-        description: formData.description,
+        description: formData.description || '',
+        transactionDate: formData.transactionDate,
       },
     })
   }
@@ -100,6 +93,7 @@ export function UpdateTransactionForm(props: {
                   </FieldLabel>
                   <Input
                     {...field}
+                    value={field.value || ''}
                     id="transaction-description"
                     placeholder="..."
                     autoComplete="on"
@@ -134,7 +128,7 @@ export function UpdateTransactionForm(props: {
             />
 
             <Controller
-              name="createdAt"
+              name="transactionDate"
               control={form.control}
               render={({ field }) => (
                 <DatePickerInput

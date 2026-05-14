@@ -1,8 +1,9 @@
 import { UpdateTransactionForm } from '#/components/updateTransactionForm'
 import { transactions } from '#/db/schema'
-import { createFileRoute } from '@tanstack/react-router'
+import { createFileRoute, Link } from '@tanstack/react-router'
 import { createServerFn } from '@tanstack/react-start'
 import { eq } from 'drizzle-orm'
+import { ArrowLeft } from 'lucide-react'
 import z from 'zod'
 
 export const Route = createFileRoute('/transactions/$id/')({
@@ -24,16 +25,22 @@ const getTransaction = createServerFn({ method: 'GET' })
 function RouteComponent() {
   const { result } = Route.useLoaderData()
   return (
-    <div className="w-full max-w-md">
-      <UpdateTransactionForm
-        transaction={{
-          id: result[0].id,
-          amount: result[0].amount || 0,
-          description: result[0].description || '',
-          createdAt: result[0].createdAt || new Date(),
-          updatedAt: result[0].updatedAt || new Date(),
-        }}
-      />
-    </div>
+    <main className="flex justify-center items-center h-screen">
+      <div className="max-w-xl w-full mx-auto">
+        <Link to="/">
+          <p className="flex py-4 gap-1 items-center text-sm text-muted-foreground">
+            <ArrowLeft size={16} /> Back to Dashboard
+          </p>
+        </Link>
+        <UpdateTransactionForm
+          transaction={{
+            id: result[0].id,
+            amount: result[0].amount || 0,
+            description: result[0].description || '',
+            transactionDate: result[0].transactionDate,
+          }}
+        />
+      </div>
+    </main>
   )
 }

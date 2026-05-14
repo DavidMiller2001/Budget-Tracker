@@ -63,10 +63,8 @@ function Home() {
 
   return (
     <>
-      <nav className="p-4 flex text-xl justify-between">
-        <Link to="/">
-          <h1 className="font-bold">Budget Tracker</h1>
-        </Link>
+      <nav className="p-4 flex text-xl justify-between items-center bg-primary-foreground">
+        <h1 className="font-bold">Budget Tracker</h1>
         <Button asChild>
           <Link
             to="/transactions/new"
@@ -77,7 +75,7 @@ function Home() {
         </Button>
       </nav>
       <main className="flex flex-col p-4 gap-4 max-w-4xl mx-auto">
-        <Card>
+        <Card className="bg-primary-foreground">
           <CardHeader>
             <CardTitle>
               <h2>Transactions By Category</h2>
@@ -90,7 +88,7 @@ function Home() {
             </CardContent>
           </CardHeader>
         </Card>
-        <Card>
+        <Card className="bg-primary-foreground">
           <CardHeader>
             <CardTitle>
               <h2>Recent Transactions</h2>

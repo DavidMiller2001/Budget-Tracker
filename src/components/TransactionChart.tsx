@@ -38,7 +38,7 @@ export function TransactionChart(props: {
     {
       type: 'Income',
       amount: incomeTotal,
-      fill: 'var(--accent)',
+      fill: 'var(--primary)',
     },
     {
       type: 'Expense',

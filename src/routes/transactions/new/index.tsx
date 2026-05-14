@@ -1,5 +1,6 @@
 import { TransactionForm } from '#/components/newTransactionForm'
-import { createFileRoute } from '@tanstack/react-router'
+import { createFileRoute, Link } from '@tanstack/react-router'
+import { ArrowLeft } from 'lucide-react'
 
 export const Route = createFileRoute('/transactions/new/')({
   component: RouteComponent,
@@ -7,8 +8,15 @@ export const Route = createFileRoute('/transactions/new/')({
 
 function RouteComponent() {
   return (
-    <div className="w-full max-w-md">
-      <TransactionForm />
-    </div>
+    <main className="flex justify-center items-center h-screen">
+      <div className="max-w-xl w-full mx-auto">
+        <Link to="/">
+          <p className="flex py-4 gap-1 items-center text-sm text-muted-foreground">
+            <ArrowLeft size={16} /> Back to Dashboard
+          </p>
+        </Link>
+        <TransactionForm />
+      </div>
+    </main>
   )
 }

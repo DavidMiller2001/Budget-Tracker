@@ -27,38 +27,6 @@ import { ArrowUpDown } from 'lucide-react'
 
 export const columns: ColumnDef<Transaction>[] = [
   {
-    accessorKey: 'description',
-    header: 'Description',
-    meta: {
-      className: 'text-start',
-    },
-  },
-  {
-    accessorKey: 'amount',
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-        >
-          Amount
-          <ArrowUpDown className="ml-2 h-4 w-4" />
-        </Button>
-      )
-    },
-    cell: ({ row }) => {
-      const amount = row.original.amount
-
-      return (
-        <div
-          className={cn('text-center', amount < 0 ? 'text-destructive' : '')}
-        >
-          ${amount}
-        </div>
-      )
-    },
-  },
-  {
     accessorKey: 'transactionDate',
     header: ({ column }) => {
       return (
@@ -67,7 +35,7 @@ export const columns: ColumnDef<Transaction>[] = [
           onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
         >
           Date
-          <ArrowUpDown className="ml-2 h-4 w-4" />
+          <ArrowUpDown />
         </Button>
       )
     },
@@ -80,11 +48,42 @@ export const columns: ColumnDef<Transaction>[] = [
     },
   },
   {
-    header: 'Actions',
+    accessorKey: 'amount',
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+        >
+          Amount
+          <ArrowUpDown />
+        </Button>
+      )
+    },
+    cell: ({ row }) => {
+      const amount = row.original.amount
+
+      return (
+        <div className={cn(amount < 0 ? 'text-destructive' : '')}>
+          ${amount}
+        </div>
+      )
+    },
+  },
+  {
+    accessorKey: 'description',
+    header: () => <div className="text-start">Description</div>,
+    cell: ({ row }) => {
+      const description = row.original.description
+      return <div className="text-start">{description}</div>
+    },
+  },
+  {
+    header: () => <div className="text-center">Actions</div>,
     id: 'actions',
     cell: ({ row }) => {
       return (
-        <div className="flex justify-center gap-2">
+        <div className="flex justify-center gap-1">
           <UpdateTransactionButton id={row.original.id} />
           <DeleteTransactionButton id={row.original.id} />
         </div>
@@ -125,13 +124,7 @@ export function TransactionDataTable({ columns, data }: DataTableProps) {
             <TableRow key={headerGroup.id}>
               {headerGroup.headers.map((header) => {
                 return (
-                  <TableHead
-                    key={header.id}
-                    className={cn(
-                      'text-center',
-                      header.column.columnDef.meta?.className,
-                    )}
-                  >
+                  <TableHead key={header.id} className="text-center">
                     {header.isPlaceholder
                       ? null
                       : flexRender(
@@ -152,13 +145,7 @@ export function TransactionDataTable({ columns, data }: DataTableProps) {
                 data-state={row.getIsSelected() && 'selected'}
               >
                 {row.getVisibleCells().map((cell) => (
-                  <TableCell
-                    key={cell.id}
-                    className={cn(
-                      'text-center',
-                      cell.column.columnDef.meta?.className,
-                    )}
-                  >
+                  <TableCell key={cell.id} className="text-center">
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
                   </TableCell>
                 ))}

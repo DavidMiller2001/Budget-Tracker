@@ -15,8 +15,17 @@ import { Button } from './ui/button'
 import { DatePickerInput } from './ui/DatePicker'
 import { createServerFn, useServerFn } from '@tanstack/react-start'
 import { eq } from 'drizzle-orm'
-import { insertTransactionSchema, transactions } from '#/db/schema'
+import { categories, insertTransactionSchema, transactions } from '#/db/schema'
 import { redirect } from '@tanstack/react-router'
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from './ui/select'
 
 const updateTransaction = createServerFn({ method: 'POST' })
   .inputValidator(
@@ -25,6 +34,7 @@ const updateTransaction = createServerFn({ method: 'POST' })
       amount: z.number(),
       description: z.string(),
       transactionDate: z.date(),
+      category: z.enum(categories),
     }),
   )
   .handler(async ({ data }) => {
@@ -36,6 +46,7 @@ const updateTransaction = createServerFn({ method: 'POST' })
         amount: data.amount,
         description: data.description,
         transactionDate: data.transactionDate,
+        category: data.category,
       })
       .where(eq(transactions.id, numId))
 
@@ -48,9 +59,13 @@ export function UpdateTransactionForm(props: {
     description: string
     amount: number
     transactionDate: Date
+    category: (typeof categories)[number]
   }
 }) {
   const { transaction } = props
+
+  console.log('Current category:', transaction.category)
+
   const updateTransactionFn = useServerFn(updateTransaction)
 
   const form = useForm<z.input<typeof insertTransactionSchema>>({
@@ -59,6 +74,7 @@ export function UpdateTransactionForm(props: {
       amount: transaction.amount,
       description: transaction.description,
       transactionDate: transaction.transactionDate,
+      category: transaction.category || 'Other',
     },
   })
 
@@ -69,6 +85,7 @@ export function UpdateTransactionForm(props: {
         amount: formData.amount,
         description: formData.description || '',
         transactionDate: formData.transactionDate,
+        category: formData.category,
       },
     })
   }
@@ -122,6 +139,38 @@ export function UpdateTransactionForm(props: {
                   {fieldState.invalid && (
                     <FieldError errors={[fieldState.error]} />
                   )}
+                </Field>
+              )}
+            />
+
+            <Controller
+              name="category"
+              control={form.control}
+              render={({ field, fieldState }) => (
+                <Field data-invalid={fieldState.invalid}>
+                  <FieldLabel htmlFor="transaction-category">
+                    Category
+                  </FieldLabel>
+
+                  <Select
+                    name={field.name}
+                    value={field.value}
+                    onValueChange={field.onChange}
+                  >
+                    <SelectTrigger className="w-full max-w-48">
+                      <SelectValue placeholder="Select a category" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectGroup>
+                        <SelectLabel>Category</SelectLabel>
+                        {categories.map((c) => (
+                          <SelectItem key={c} value={c}>
+                            {c}
+                          </SelectItem>
+                        ))}
+                      </SelectGroup>
+                    </SelectContent>
+                  </Select>
                 </Field>
               )}
             />

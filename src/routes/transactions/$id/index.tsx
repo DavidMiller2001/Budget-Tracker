@@ -38,6 +38,7 @@ function RouteComponent() {
             amount: result[0].amount || 0,
             description: result[0].description || '',
             transactionDate: result[0].transactionDate,
+            category: result[0].category || 'Other',
           }}
         />
       </div>

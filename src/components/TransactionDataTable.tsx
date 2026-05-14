@@ -24,6 +24,7 @@ import { cn } from '#/lib/utils'
 import { useState } from 'react'
 import { Button } from './ui/button'
 import { ArrowUpDown } from 'lucide-react'
+import { Badge } from './ui/badge'
 
 export const columns: ColumnDef<Transaction>[] = [
   {
@@ -76,6 +77,14 @@ export const columns: ColumnDef<Transaction>[] = [
     cell: ({ row }) => {
       const description = row.original.description
       return <div className="text-start">{description}</div>
+    },
+  },
+  {
+    accessorKey: 'category',
+    header: 'Category',
+    cell: ({ row }) => {
+      const category = row.original.category
+      return <Badge>{category}</Badge>
     },
   },
   {

@@ -26,21 +26,20 @@ export const Route = createFileRoute('/')({
   loader: () => getTransactions(),
 })
 
-export type TransactionChartDataType = 'Income' | 'Expense' | 'Other'
-
 function Home() {
   const { data } = Route.useLoaderData()
-  const formattedData = data.map((t) => {
-    return {
-      id: t.id,
-      description: t.description,
-      amount: t.amount,
-      transactionDate: t.transactionDate,
-    }
-  })
+  // const formattedData = data.map((t) => {
+  //   return {
+  //     id: t.id,
+  //     description: t.description,
+  //     amount: t.amount,
+  //     transactionDate: t.transactionDate,
+  //     category: t.category,
+  //   }
+  // })
 
   const transactionData: {
-    type: TransactionChartDataType
+    type: string
     amount: number
   }[] = data.map((t) => {
     if (!t || !t.amount) {
@@ -50,12 +49,12 @@ function Home() {
       }
     } else if (t.amount > 0) {
       return {
-        type: 'Income',
+        type: t.category,
         amount: t.amount,
       }
     } else {
       return {
-        type: 'Expense',
+        type: t.category,
         amount: Math.abs(t.amount),
       }
     }
@@ -98,7 +97,7 @@ function Home() {
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <TransactionDataTable columns={columns} data={formattedData} />
+            <TransactionDataTable columns={columns} data={data} />
           </CardContent>
         </Card>
       </main>

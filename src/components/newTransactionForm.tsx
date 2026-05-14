@@ -17,6 +17,17 @@ import { DatePickerInput } from './ui/DatePicker'
 import { insertTransactionSchema } from '@/db/schema'
 import { createServerFn, useServerFn } from '@tanstack/react-start'
 import { redirect } from '@tanstack/react-router'
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from './ui/select'
+
+const categories = ['Income', 'Bill', 'Food', 'Entertainment', 'Other'] as const
 
 const addNewTransaction = createServerFn({ method: 'POST' })
   .inputValidator(
@@ -24,6 +35,7 @@ const addNewTransaction = createServerFn({ method: 'POST' })
       amount: z.number(),
       description: z.string(),
       transactionDate: z.date(),
+      category: z.enum(categories),
     }),
   )
   .handler(async ({ data }) => {
@@ -33,6 +45,7 @@ const addNewTransaction = createServerFn({ method: 'POST' })
       amount: data.amount,
       description: data.description,
       transactionDate: data.transactionDate,
+      category: data.category,
     })
     throw redirect({ to: '/' })
   })
@@ -55,6 +68,7 @@ export function TransactionForm() {
         amount: data.amount,
         description: data.description || '',
         transactionDate: data.transactionDate,
+        category: data.category,
       },
     })
   }
@@ -102,12 +116,45 @@ export function TransactionForm() {
                   <Input
                     type="number"
                     step="any"
+                    id="transaction-amount"
                     {...form.register('amount', { valueAsNumber: true })}
                   />
 
                   {fieldState.invalid && (
                     <FieldError errors={[fieldState.error]} />
                   )}
+                </Field>
+              )}
+            />
+
+            <Controller
+              name="category"
+              control={form.control}
+              render={({ field, fieldState }) => (
+                <Field data-invalid={fieldState.invalid}>
+                  <FieldLabel htmlFor="transaction-category">
+                    Category
+                  </FieldLabel>
+
+                  <Select
+                    name={field.name}
+                    value={field.value}
+                    onValueChange={field.onChange}
+                  >
+                    <SelectTrigger className="w-full max-w-48">
+                      <SelectValue placeholder="Select a category" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectGroup>
+                        <SelectLabel>Category</SelectLabel>
+                        {categories.map((c) => (
+                          <SelectItem key={c} value={c}>
+                            {c}
+                          </SelectItem>
+                        ))}
+                      </SelectGroup>
+                    </SelectContent>
+                  </Select>
                 </Field>
               )}
             />

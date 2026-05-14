@@ -5,7 +5,6 @@ import {
   ChartTooltipContent,
   type ChartConfig,
 } from '@/components/ui/chart'
-import type { TransactionChartDataType } from '#/routes'
 import { cn } from '#/lib/utils'
 
 const transactionChartConfig = {
@@ -18,7 +17,7 @@ const transactionChartConfig = {
 } satisfies ChartConfig
 
 export function TransactionChart(props: {
-  transactionData: { type: TransactionChartDataType; amount: number }[]
+  transactionData: { type: string; amount: number }[]
 }) {
   const { transactionData } = props
 
@@ -28,7 +27,7 @@ export function TransactionChart(props: {
     .reduce((sum, t) => sum + t.amount, 0)
 
   const expenseTotal = transactionData
-    .filter((t) => t.type === 'Expense')
+    .filter((t) => t.type !== 'Income')
     .reduce((sum, t) => sum + t.amount, 0)
 
   const balance = incomeTotal - expenseTotal

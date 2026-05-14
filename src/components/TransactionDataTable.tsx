@@ -84,7 +84,41 @@ export const columns: ColumnDef<Transaction>[] = [
     header: 'Category',
     cell: ({ row }) => {
       const category = row.original.category
-      return <Badge>{category}</Badge>
+      switch (category) {
+        case 'Income':
+          return (
+            <Badge style={{ backgroundColor: 'var(--primary)' }}>
+              {category}
+            </Badge>
+          )
+        case 'Bill':
+          return (
+            <Badge style={{ backgroundColor: 'var(--destructive)' }}>
+              {category}
+            </Badge>
+          )
+        case 'Food':
+          return (
+            <Badge
+              style={{ backgroundColor: 'var(--food-color)' }}
+              className="bg-[--food-color]"
+            >
+              {category}
+            </Badge>
+          )
+        case 'Entertainment':
+          return (
+            <Badge style={{ backgroundColor: 'var(--entertainment-color)' }}>
+              {category}
+            </Badge>
+          )
+        case 'Other':
+          return (
+            <Badge style={{ backgroundColor: 'var(--other-color)' }}>
+              {category}
+            </Badge>
+          )
+      }
     },
   },
   {

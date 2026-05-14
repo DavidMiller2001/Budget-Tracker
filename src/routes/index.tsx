@@ -11,6 +11,7 @@ import {
   CardHeader,
   CardTitle,
 } from '#/components/ui/card'
+import type { categories } from '#/db/schema'
 
 import { createFileRoute, Link } from '@tanstack/react-router'
 import { createServerFn } from '@tanstack/react-start'
@@ -28,33 +29,24 @@ export const Route = createFileRoute('/')({
 
 function Home() {
   const { data } = Route.useLoaderData()
-  // const formattedData = data.map((t) => {
-  //   return {
-  //     id: t.id,
-  //     description: t.description,
-  //     amount: t.amount,
-  //     transactionDate: t.transactionDate,
-  //     category: t.category,
-  //   }
-  // })
 
   const transactionData: {
-    type: string
+    category: (typeof categories)[number]
     amount: number
   }[] = data.map((t) => {
     if (!t || !t.amount) {
       return {
-        type: 'Other',
+        category: 'Other',
         amount: 0,
       }
     } else if (t.amount > 0) {
       return {
-        type: t.category,
+        category: t.category,
         amount: t.amount,
       }
     } else {
       return {
-        type: t.category,
+        category: t.category,
         amount: Math.abs(t.amount),
       }
     }

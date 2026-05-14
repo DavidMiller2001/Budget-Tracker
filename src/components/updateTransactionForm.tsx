@@ -64,8 +64,6 @@ export function UpdateTransactionForm(props: {
 }) {
   const { transaction } = props
 
-  console.log('Current category:', transaction.category)
-
   const updateTransactionFn = useServerFn(updateTransaction)
 
   const form = useForm<z.input<typeof insertTransactionSchema>>({

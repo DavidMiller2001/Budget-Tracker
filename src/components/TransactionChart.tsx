@@ -6,43 +6,90 @@ import {
   type ChartConfig,
 } from '@/components/ui/chart'
 import { cn } from '#/lib/utils'
+import type { categories } from '#/db/schema'
 
 const transactionChartConfig = {
   income: {
     label: 'Income',
   },
-  expense: {
-    label: 'Expense',
+  bill: {
+    label: 'Bills',
+  },
+  food: {
+    label: 'Food',
+  },
+  entertainment: {
+    label: 'Entertainment',
+  },
+  other: {
+    label: 'Other',
   },
 } satisfies ChartConfig
 
 export function TransactionChart(props: {
-  transactionData: { type: string; amount: number }[]
+  transactionData: { category: (typeof categories)[number]; amount: number }[]
 }) {
   const { transactionData } = props
 
   // Aggregate totals
-  const incomeTotal = transactionData
-    .filter((t) => t.type === 'Income')
-    .reduce((sum, t) => sum + t.amount, 0)
+  let incomeTotal = 0
+  let expenseTotal = 0
+  let billTotal = 0
+  let foodTotal = 0
+  let entertainmentTotal = 0
+  let otherTotal = 0
 
-  const expenseTotal = transactionData
-    .filter((t) => t.type !== 'Income')
-    .reduce((sum, t) => sum + t.amount, 0)
+  transactionData.forEach((t) => {
+    switch (t.category) {
+      case 'Income':
+        incomeTotal += t.amount
+        break
+      case 'Bill':
+        billTotal += t.amount
+        expenseTotal += t.amount
+        break
+      case 'Food':
+        foodTotal += t.amount
+        expenseTotal += t.amount
+        break
+      case 'Entertainment':
+        entertainmentTotal += t.amount
+        expenseTotal += t.amount
+        break
+      default:
+        otherTotal += t.amount
+        expenseTotal += t.amount
+    }
+  })
 
   const balance = incomeTotal - expenseTotal
 
   // Final chart data
   const chartData = [
     {
-      type: 'Income',
+      category: 'Income',
       amount: incomeTotal,
       fill: 'var(--primary)',
     },
     {
-      type: 'Expense',
-      amount: expenseTotal,
+      category: 'Bills',
+      amount: billTotal,
       fill: 'var(--destructive)',
+    },
+    {
+      category: 'Food',
+      amount: foodTotal,
+      fill: 'var(--food-color)',
+    },
+    {
+      category: 'Entertainment',
+      amount: entertainmentTotal,
+      fill: 'var(--entertainment-color)',
+    },
+    {
+      category: 'Other',
+      amount: otherTotal,
+      fill: 'var(--other-color)',
     },
   ]
 
@@ -57,7 +104,7 @@ export function TransactionChart(props: {
         <Pie
           data={chartData}
           dataKey="amount"
-          nameKey="type"
+          nameKey="category"
           innerRadius={50} // donut chart
           outerRadius={90}
           strokeWidth={2}

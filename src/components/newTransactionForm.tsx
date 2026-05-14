@@ -14,7 +14,7 @@ import { Input } from './ui/input'
 import { Button } from './ui/button'
 import { DatePickerInput } from './ui/DatePicker'
 
-import { insertTransactionSchema } from '@/db/schema'
+import { categories, insertTransactionSchema } from '@/db/schema'
 import { createServerFn, useServerFn } from '@tanstack/react-start'
 import { redirect } from '@tanstack/react-router'
 import {
@@ -26,8 +26,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from './ui/select'
-
-const categories = ['Income', 'Bill', 'Food', 'Entertainment', 'Other'] as const
 
 const addNewTransaction = createServerFn({ method: 'POST' })
   .inputValidator(

@@ -62,26 +62,48 @@ function Home() {
   })
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>
-          <h1>Transaction History</h1>
-        </CardTitle>
-        <CardDescription>
-          <p>
-            a list and graphical representation of all documented transactions
-          </p>
-        </CardDescription>
-      </CardHeader>
-      <CardContent>
-        <TransactionChart transactionData={transactionData} />
-        <Link to="/transactions/new">
-          <Button asChild variant={'ghost'} size={'icon-sm'}>
-            <Plus />
-          </Button>
+    <>
+      <nav className="p-4 flex text-xl justify-between">
+        <Link to="/">
+          <h1 className="font-bold">Budget Tracker</h1>
         </Link>
-        <TransactionDataTable columns={columns} data={formattedData} />
-      </CardContent>
-    </Card>
+        <Button asChild>
+          <Link
+            to="/transactions/new"
+            className="text-primary-foreground font-semibold"
+          >
+            <Plus /> Add Transaction
+          </Link>
+        </Button>
+      </nav>
+      <main className="flex flex-col p-4 gap-4 max-w-4xl mx-auto">
+        <Card>
+          <CardHeader>
+            <CardTitle>
+              <h2>Transactions By Category</h2>
+            </CardTitle>
+            <CardDescription>
+              <p>May 2025</p>
+            </CardDescription>
+            <CardContent>
+              <TransactionChart transactionData={transactionData} />
+            </CardContent>
+          </CardHeader>
+        </Card>
+        <Card>
+          <CardHeader>
+            <CardTitle>
+              <h2>Recent Transactions</h2>
+            </CardTitle>
+            <CardDescription>
+              <p>all transactions for May 2025</p>
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <TransactionDataTable columns={columns} data={formattedData} />
+          </CardContent>
+        </Card>
+      </main>
+    </>
   )
 }

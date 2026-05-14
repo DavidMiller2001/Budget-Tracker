@@ -47,8 +47,7 @@ export function UpdateTransactionForm(props: {
     id: number
     description: string
     amount: number
-    createdAt: Date
-    updatedAt: Date
+    transactionDate: Date
   }
 }) {
   const { transaction } = props
@@ -59,7 +58,7 @@ export function UpdateTransactionForm(props: {
     defaultValues: {
       amount: transaction.amount,
       description: transaction.description,
-      transactionDate: transaction.createdAt,
+      transactionDate: transaction.transactionDate,
     },
   })
 

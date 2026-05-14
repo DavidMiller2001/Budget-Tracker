@@ -1,4 +1,4 @@
-import { Pie, PieChart } from 'recharts'
+import { Label, Pie, PieChart } from 'recharts'
 import {
   ChartContainer,
   ChartTooltip,
@@ -6,15 +6,14 @@ import {
   type ChartConfig,
 } from '@/components/ui/chart'
 import type { TransactionChartDataType } from '#/routes'
+import { cn } from '#/lib/utils'
 
 const transactionChartConfig = {
   income: {
     label: 'Income',
-    color: 'var(--chart-1)',
   },
   expense: {
     label: 'Expense',
-    color: 'var(--chart-2)',
   },
 } satisfies ChartConfig
 
@@ -32,17 +31,19 @@ export function TransactionChart(props: {
     .filter((t) => t.type === 'Expense')
     .reduce((sum, t) => sum + t.amount, 0)
 
+  const balance = incomeTotal - expenseTotal
+
   // Final chart data
   const chartData = [
     {
       type: 'Income',
       amount: incomeTotal,
-      fill: '#22c55e',
+      fill: 'var(--accent)',
     },
     {
       type: 'Expense',
       amount: expenseTotal,
-      fill: '#ef4444',
+      fill: 'var(--destructive)',
     },
   ]
 
@@ -58,11 +59,44 @@ export function TransactionChart(props: {
           data={chartData}
           dataKey="amount"
           nameKey="type"
-          innerRadius={30} // donut chart
+          innerRadius={50} // donut chart
           outerRadius={90}
           strokeWidth={2}
           label
-        />
+        >
+          <Label
+            content={({ viewBox }) => {
+              if (viewBox && 'cx' in viewBox && 'cy' in viewBox) {
+                return (
+                  <text
+                    x={viewBox.cx}
+                    y={viewBox.cy}
+                    textAnchor="middle"
+                    dominantBaseline="middle"
+                  >
+                    <tspan
+                      x={viewBox.cx}
+                      y={viewBox.cy}
+                      className={cn(
+                        'text-3xl font-bold',
+                        balance < 0 ? 'fill-destructive' : 'fill-primary',
+                      )}
+                    >
+                      {`$${incomeTotal - expenseTotal}`}
+                    </tspan>
+                    <tspan
+                      x={viewBox.cx}
+                      y={(viewBox.cy || 0) + 24}
+                      className="fill-muted-foreground"
+                    >
+                      Balance
+                    </tspan>
+                  </text>
+                )
+              }
+            }}
+          />
+        </Pie>
       </PieChart>
     </ChartContainer>
   )

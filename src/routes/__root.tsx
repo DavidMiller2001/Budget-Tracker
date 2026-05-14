@@ -1,9 +1,4 @@
-import {
-  HeadContent,
-  Link,
-  Scripts,
-  createRootRoute,
-} from '@tanstack/react-router'
+import { HeadContent, Scripts, createRootRoute } from '@tanstack/react-router'
 import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools'
 import { TanStackDevtools } from '@tanstack/react-devtools'
 
@@ -35,12 +30,14 @@ export const Route = createRootRoute({
 
 function RootDocument({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className="dark">
+    <html lang="en">
       <head>
         <HeadContent />
+
+        <script src="https://tweakcn.com/live-preview.min.js"></script>
       </head>
       <body>
-        <RootLayout>{children}</RootLayout>
+        {children}
         <TanStackDevtools
           config={{
             position: 'bottom-right',
@@ -55,20 +52,5 @@ function RootDocument({ children }: { children: React.ReactNode }) {
         <Scripts />
       </body>
     </html>
-  )
-}
-
-function RootLayout(props: { children: React.ReactNode }) {
-  return (
-    <div>
-      <nav className="p-4 flex  text-xl">
-        <Link to="/">
-          <h1 className="font-bold">Budget Tracker</h1>
-        </Link>
-      </nav>
-      <main className="flex flex-col justify-center items-center">
-        {props.children}
-      </main>
-    </div>
   )
 }

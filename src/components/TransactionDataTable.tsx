@@ -46,6 +46,17 @@ export const columns: ColumnDef<Transaction>[] = [
         </Button>
       )
     },
+    cell: ({ row }) => {
+      const amount = row.original.amount
+
+      return (
+        <div
+          className={cn('text-center', amount < 0 ? 'text-destructive' : '')}
+        >
+          ${amount}
+        </div>
+      )
+    },
   },
   {
     accessorKey: 'transactionDate',
@@ -53,7 +64,7 @@ export const columns: ColumnDef<Transaction>[] = [
       return (
         <Button
           variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === 'desc')}
+          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
         >
           Date
           <ArrowUpDown className="ml-2 h-4 w-4" />
@@ -66,6 +77,18 @@ export const columns: ColumnDef<Transaction>[] = [
       return new Intl.DateTimeFormat('en-US', {
         dateStyle: 'short',
       }).format(date)
+    },
+  },
+  {
+    header: 'Actions',
+    id: 'actions',
+    cell: ({ row }) => {
+      return (
+        <div className="flex justify-center gap-2">
+          <UpdateTransactionButton id={row.original.id} />
+          <DeleteTransactionButton id={row.original.id} />
+        </div>
+      )
     },
   },
 ]
@@ -139,9 +162,6 @@ export function TransactionDataTable({ columns, data }: DataTableProps) {
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
                   </TableCell>
                 ))}
-
-                <UpdateTransactionButton id={row.original.id} />
-                <DeleteTransactionButton id={row.original.id} />
               </TableRow>
             ))
           ) : (

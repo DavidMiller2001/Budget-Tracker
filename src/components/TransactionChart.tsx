@@ -1,27 +1,31 @@
 import { Label, Pie, PieChart } from 'recharts'
 import {
   ChartContainer,
+  ChartLegend,
+  ChartLegendContent,
   ChartTooltip,
   ChartTooltipContent,
   type ChartConfig,
 } from '@/components/ui/chart'
 import { cn } from '#/lib/utils'
 import type { categories } from '#/db/schema'
+import { useEffect, useState } from 'react'
+import { Skeleton } from './ui/skeleton'
 
 const transactionChartConfig = {
-  income: {
+  Income: {
     label: 'Income',
   },
-  bill: {
+  Bills: {
     label: 'Bills',
   },
-  food: {
+  Food: {
     label: 'Food',
   },
-  entertainment: {
+  Entertainment: {
     label: 'Entertainment',
   },
-  other: {
+  Other: {
     label: 'Other',
   },
 } satisfies ChartConfig
@@ -93,6 +97,21 @@ export function TransactionChart(props: {
     },
   ]
 
+  const [isMounted, setIsMounted] = useState(false)
+
+  useEffect(() => {
+    setIsMounted(true)
+  }, [])
+
+  if (!isMounted) {
+    return (
+      <div className="relative mx-auto w-fit flex flex-col items-center">
+        <Skeleton className="rounded-full h-[200px] w-[200px]" />
+        <Skeleton className="w-[200px] h-[20px] rounded-2xl mt-2" />
+      </div>
+    )
+  }
+
   return (
     <ChartContainer
       config={transactionChartConfig}
@@ -118,7 +137,7 @@ export function TransactionChart(props: {
                     x={viewBox.cx}
                     y={viewBox.cy}
                     textAnchor="middle"
-                    dominantBaseline="middle"
+                    dominantBaseline="ideographic"
                   >
                     <tspan
                       x={viewBox.cx}
@@ -143,6 +162,7 @@ export function TransactionChart(props: {
             }}
           />
         </Pie>
+        <ChartLegend content={<ChartLegendContent nameKey="category" />} />
       </PieChart>
     </ChartContainer>
   )

@@ -15,7 +15,6 @@ import {
   type ColumnDef,
   type SortingState,
   getSortedRowModel,
-  type ColumnFiltersState,
   getFilteredRowModel,
 } from '@tanstack/react-table'
 import {
@@ -160,7 +159,7 @@ export function TransactionDataTable({ columns, data }: DataTableProps) {
       desc: true,
     },
   ])
-  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
+  const [globalFilter, setGlobalFilter] = useState<any>([])
 
   const table = useReactTable({
     data,
@@ -168,27 +167,21 @@ export function TransactionDataTable({ columns, data }: DataTableProps) {
     getCoreRowModel: getCoreRowModel(),
     onSortingChange: setSorting,
     getSortedRowModel: getSortedRowModel(),
-    onColumnFiltersChange: setColumnFilters,
     getFilteredRowModel: getFilteredRowModel(),
     state: {
       sorting,
-      columnFilters,
+      globalFilter,
     },
+    onGlobalFilterChange: setGlobalFilter,
   })
-
-  // TODO: try using global filter instead of column filter for filtering
 
   return (
     <div>
       <div className="flex items-center py-4">
         <Input
-          placeholder="Filter by category..."
-          value={
-            (table.getColumn('category')?.getFilterValue() as string) ?? ''
-          }
-          onChange={(event) =>
-            table.getColumn('category')?.setFilterValue(event.target.value)
-          }
+          placeholder="Search..."
+          value={globalFilter ?? ''}
+          onChange={(event) => setGlobalFilter(String(event.target.value))}
           className="max-w-sm"
         />
       </div>

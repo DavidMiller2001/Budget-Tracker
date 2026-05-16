@@ -11,6 +11,7 @@
   --food-color: hsl(30, 84%, 57%);
   --entertainment-color: hsl(286, 85%, 46%);
   --other-color: #bbb;
+  --bill-color: var(--destructive);
 
   --sea-ink: #173a40;
   --sea-ink-soft: #416166;

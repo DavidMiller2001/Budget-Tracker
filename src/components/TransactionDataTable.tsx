@@ -16,6 +16,7 @@ import {
   type SortingState,
   getSortedRowModel,
   getFilteredRowModel,
+  getPaginationRowModel,
 } from '@tanstack/react-table'
 import {
   DeleteTransactionButton,
@@ -24,7 +25,7 @@ import {
 import { cn } from '#/lib/utils'
 import { useState } from 'react'
 import { Button } from './ui/button'
-import { ArrowUpDown } from 'lucide-react'
+import { ArrowUpDown, ChevronLeft, ChevronRight } from 'lucide-react'
 import { Badge } from './ui/badge'
 import { Input } from './ui/input'
 
@@ -168,6 +169,7 @@ export function TransactionDataTable({ columns, data }: DataTableProps) {
     onSortingChange: setSorting,
     getSortedRowModel: getSortedRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
     state: {
       sorting,
       globalFilter,
@@ -234,6 +236,24 @@ export function TransactionDataTable({ columns, data }: DataTableProps) {
             )}
           </TableBody>
         </Table>
+        <div className="flex items-center justify-center space-x-2 py-4">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => table.previousPage()}
+            disabled={!table.getCanPreviousPage()}
+          >
+            <ChevronLeft />
+          </Button>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => table.nextPage()}
+            disabled={!table.getCanNextPage()}
+          >
+            <ChevronRight />
+          </Button>
+        </div>
       </div>
     </div>
   )

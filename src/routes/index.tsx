@@ -102,7 +102,7 @@ function Home() {
           </Link>
         </Button>
       </nav>
-      <main className="flex flex-col p-4 gap-4 max-w-4xl mx-auto">
+      <main className="flex flex-col p-4 gap-4 max-w-4xl mx-auto pb-0">
         <div className="grid grid-cols-[1fr_2fr] grid-rows-2 gap-4">
           <Card className="bg-primary-foreground flex justify-center">
             <CardContent>

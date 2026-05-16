@@ -136,7 +136,10 @@ function Home() {
           </Card>
           <Card className="bg-primary-foreground row-start-1 row-span-2 col-2">
             <CardHeader>
-              <CardTitle>Expenses by Category</CardTitle>
+              <CardTitle className="flex justify-between items-center">
+                <h2>Expenses by Category</h2>
+                <h3>{`$${Math.abs(totalExpense).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`}</h3>
+              </CardTitle>
             </CardHeader>
             <CardContent>
               <FieldGroup>
@@ -179,6 +182,11 @@ function Home() {
           </CardContent>
         </Card>
       </main>
+      <footer>
+        <p className="text-center text-muted-foreground text-sm p-4">
+          © 2023 Budget Tracker. All rights reserved.
+        </p>
+      </footer>
     </>
   )
 }

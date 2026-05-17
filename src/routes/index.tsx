@@ -14,10 +14,11 @@ import {
 import { Field, FieldGroup, FieldLabel } from '#/components/ui/field'
 import { Progress } from '#/components/ui/progress'
 import type { categories } from '#/db/schema'
+import { cn } from '#/lib/utils'
 
 import { createFileRoute, Link } from '@tanstack/react-router'
 import { createServerFn } from '@tanstack/react-start'
-import { Plus, TrendingDown, TrendingUp } from 'lucide-react'
+import { Plus, TrendingDown, TrendingUp, Wallet } from 'lucide-react'
 const getTransactions = createServerFn({ method: 'GET' }).handler(async () => {
   const { db } = await import('#/db')
   const data = await db.query.transactions.findMany()
@@ -102,15 +103,16 @@ function Home() {
           </Link>
         </Button>
       </nav>
+
       <main className="flex flex-col p-4 gap-4 max-w-4xl mx-auto pb-0">
-        <div className="grid grid-cols-[1fr_2fr] grid-rows-2 gap-4">
+        <div className="grid grid-cols-[1fr_2fr] grid-rows-3 gap-4">
           <Card className="bg-primary-foreground flex justify-center">
             <CardContent>
-              <div className="flex gap-2 items-center justify-around">
+              <div className="flex gap-2 items-center justify-between">
                 <div className="flex items-center justify-center bg-accent w-[50px] h-[50px] rounded-xl">
                   <TrendingUp color="var(--color-primary)" />
                 </div>
-                <div>
+                <div className="text-end">
                   <p className="text-muted-foreground text-xs">
                     Income this month
                   </p>
@@ -121,11 +123,11 @@ function Home() {
           </Card>
           <Card className="bg-primary-foreground col-1 flex justify-center">
             <CardContent>
-              <div className="flex gap-2 items-center justify-around">
+              <div className="flex gap-2 items-center justify-between">
                 <div className="flex items-center justify-center bg-destructive/30 w-[50px] h-[50px] rounded-xl">
                   <TrendingDown color="var(--color-destructive)" />
                 </div>
-                <div>
+                <div className="text-end">
                   <p className="text-muted-foreground text-xs">
                     Expenses this month
                   </p>
@@ -134,7 +136,31 @@ function Home() {
               </div>
             </CardContent>
           </Card>
-          <Card className="bg-primary-foreground row-start-1 row-span-2 col-2">
+
+          <Card className="bg-primary-foreground col-1 flex justify-center">
+            <CardContent>
+              <div className="flex gap-2 items-center justify-between">
+                <div className="flex items-center justify-center bg-foreground/50 w-[50px] h-[50px] rounded-xl">
+                  <Wallet />
+                </div>
+                <div className="text-end">
+                  <p className="text-muted-foreground text-xs">Net Balance</p>
+                  <h3
+                    className={cn(
+                      'font-bold text-xl',
+                      totalIncome - Math.abs(totalExpense) >= 0
+                        ? 'text-primary'
+                        : 'text-destructive',
+                    )}
+                  >
+                    {`$${(totalIncome - Math.abs(totalExpense)).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`}
+                  </h3>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card className="bg-primary-foreground row-start-1 row-span-3 col-2">
             <CardHeader>
               <CardTitle className="flex justify-between items-center">
                 <h2>Expenses by Category</h2>
@@ -155,6 +181,7 @@ function Home() {
             </CardContent>
           </Card>
         </div>
+
         <Card className="bg-primary-foreground">
           <CardHeader>
             <CardTitle>
